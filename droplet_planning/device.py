@@ -18,9 +18,9 @@ def svg_polygons_to_channels(svg_source, xpath='svg:polygon',
 
     e_root = etree.parse(svg_source)
     return (pd.DataFrame([[polygon_i.attrib['id'],
-                           map(int, polygon_i.attrib
+                           list(map(int, polygon_i.attrib
                                .get('data-channels', '')
-                               .split(','))]
+                               .split(',')))]
                           for polygon_i in
                           e_root.xpath(xpath, namespaces=NSMAP)],
                          columns=['id', 'channels'])
@@ -57,16 +57,16 @@ class DeviceFrames(object):
                                             inplace=True)
 
         self.df_connected_indexed = self.df_connected.copy()
-        self.df_connected_indexed['source'] = map(str, self.path_indexes
+        self.df_connected_indexed['source'] = list(map(str, self.path_indexes
                                                   [self.df_connected
-                                                   ['source']])
-        self.df_connected_indexed['target'] = map(str, self.path_indexes
+                                                   ['source']]))
+        self.df_connected_indexed['target'] = list(map(str, self.path_indexes
                                                        [self.df_connected
-                                                        ['target']])
+                                                        ['target']]))
 
         self.df_paths_indexed = self.df_paths.copy()
-        self.df_paths_indexed['path_id'] = map(str, self.path_indexes
-                                               [self.df_paths.path_id])
+        self.df_paths_indexed['path_id'] = list(map(str, self.path_indexes
+                                               [self.df_paths.path_id]))
         self.graph = nx.Graph()
         for index, row in self.df_connected.iterrows():
             self.graph.add_edge(row['source'], row['target'],

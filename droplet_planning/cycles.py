@@ -9,8 +9,7 @@ def test_p_fast(nodes, connections):
     neighbour.
     '''
     neighbour_nodes = nodes[1:] + nodes[:1]
-    return map(lambda v: connections[tuple(v)],
-               itertools.izip(nodes, neighbour_nodes))
+    return [connections[tuple(v)] for v in zip(nodes, neighbour_nodes)]
 
 
 def find_cycle_enumerate(nodes, connections, test_f=test_p_fast, findall=False):
@@ -60,12 +59,12 @@ def find_cycle_anneal(nodes, connections, starting_temperature=1,
         return nodes_i
     temperature = starting_temperature
 
-    for retry_i in xrange(retry_count):
-        for i in xrange(100):
+    for retry_i in range(retry_count):
+        for i in range(100):
             swaps_evaluated = 0
             swaps_accepted = 0
 
-            for j in xrange(int(inner_num * len(nodes) ** 1.333)):
+            for j in range(int(inner_num * len(nodes) ** 1.333)):
                 source, target = np.random.randint(1, len(nodes_i), size=2)
                 nodes_j = nodes_i.copy()
                 nodes_j[[source, target]] = nodes_i[[target, source]]
@@ -95,6 +94,6 @@ def find_cycle_anneal(nodes, connections, starting_temperature=1,
             else:
                 temperature *= .8
             if i % 10 == 0:
-                print 'temperature: %s, success: %.2f' % (temperature,
-                                                          success_ratio)
+                print('temperature: %s, success: %.2f' % (temperature,
+                                                          success_ratio))
         raise ValueError('No cycle found (score: %s) %s' % (score_i, nodes_i))

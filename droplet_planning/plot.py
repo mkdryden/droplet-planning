@@ -44,8 +44,8 @@ def plot_paths(df_paths, path_colors=None, labelsize=8, axis=None,
 
         # Assign a color to each path identifier.
         path_ids = df_paths.path_id.unique()
-        path_colors = pd.Series([colors.next()
-                                 for i in xrange(path_ids.shape[0])],
+        path_colors = pd.Series([next(colors)
+                                 for i in range(path_ids.shape[0])],
                                 index=path_ids)
 
     # Draw electrode paths
@@ -93,8 +93,8 @@ def draw_device(df_paths, df_connected, axis=None, **kwargs):
     colors = axis._get_lines.color_cycle
 
     # Collect enough colors from matplotlib color cycle to color electrodes.
-    colors_array = np.array([colors.next()
-                             for i in xrange(10)])[[0, 1, 3, 5, 7]]
+    colors_array = np.array([next(colors)
+                             for i in range(10)])[[0, 1, 3, 5, 7]]
 
     # Use `networkx` graph coloring algorithm to color electrodes.
     # (Avoids using same color for adjacent electrodes).
@@ -124,7 +124,7 @@ def draw_connections(df_paths, df_connected, color=None, axis=None):
 
         path_current = path_current.append(path_adjacent)
         poly = Polygon(path_current[['x_center','y_center']].values,
-                       edgecolor=colors.next() if color is None else color,
+                       edgecolor=next(colors) if color is None else color,
                        facecolor='none', alpha=.4, linewidth=5)
         axis.add_patch(poly)
     return axis
